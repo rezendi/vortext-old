@@ -1,0 +1,48 @@
+{% extends "base.html" %}
+{% block title %}Vortext | Your profile{% endblock %}
+{% block content %}
+  <div id="profile_container">
+    {% if first_time %}
+      <p>Welcome to Vortext!</p>
+      <p>Feel free to skip this step &mdash; nothing here is required.</p>
+    {% endif %}
+    <form method="post" action="/profile">
+      <div class="profile_field">
+        <label class="profile_label" for="name">Name</label>
+        <input class="profile_input" name="name" value="{{account.show_name}}"/>
+      </div>
+      <div class="profile_field">
+        <label class="profile_label" for="email">Email</label>
+        <input class="profile_input" name="email" value="{{account.show_email}}"/>
+      </div>
+      <div class="profile_field">
+        <label class="checkbox_label" for="private">Private account?</label>
+        <input class="profile_checkbox" type="checkbox" name="privacy" value="private" {% if account.is_private%}checked{% endif %}/>
+      </div>
+      <div class="profile_field">
+        <input class="profile_submit" type="submit" value="Save {% if first_time %}Values{%else %}Changes{% endif %}"/>
+      </div>
+      {% if first_time %}
+        <div class="profile_field">
+          <input class="profile_submit" type="button" value="Skip This Step" onclick="javascript:skip_profile();"/>
+        </div>
+      {% endif %}
+    </form>
+    <br/>
+    <HR/>
+    {% if first_time %}
+      <p>If you enter your email address, we'll email you when we've finished parsing your tweets. This can take 15-30 minutes or more.</p>
+    {% endif %}
+    {% if first_time %}
+      <p>Please note: Twitter's API only lets us access your 3200 most recent tweets. To go back further, you'll need to download your personal <a href="https://support.twitter.com/articles/20170160-downloading-your-twitter-archive">Twitter archive</a>,
+      and then <a href="/upload">upload it</a> to Vortext.</p>
+    {% else %}
+      <P/>
+      {% if account.has_uploaded_data %}
+        You have uploaded your Twitter archive.
+      {% else %}
+        <a href="/upload">Upload your Twitter archive</a>
+      {% endif %}
+    {% endif %}
+  </div>
+{% endblock %}

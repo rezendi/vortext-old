@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+    <title>{% block title %}{% endblock %}</title>
+
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <meta name="Description" content="{% block description %}{% endblock %}" />
+
+    <link type="text/css" rel="stylesheet" href="/static/vortext.css" />
+    <link rel="stylesheet" href="//ajax.googleapis.com/ajax/libs/jqueryui/1.11.2/themes/smoothness/jquery-ui.css" />
+
+    <script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
+    <script src="//ajax.googleapis.com/ajax/libs/jqueryui/1.11.2/jquery-ui.min.js"></script>
+    <script src="/static/underscore-min.js"></script>
+    <script src="/static/vortext.js"></script>
+
+    {% block head%}{%endblock%}
+
+  <script>
+    (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+    (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+    m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+    })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+  
+    ga('create', 'UA-59981504-1', 'auto');
+    ga('send', 'pageview');
+  
+  </script>
+</head>
+
+<body{%block bodyjs%}{%endblock%}>
+    <div id="vt_header">
+        <a href="/"><img id="logo" src="/static/vortext_logo.png"/></a>
+        <a id="site_title" class="selected" href="/me">Vortext</a>
+        {% block header %}{% endblock %}
+    </div>
+    <div id="vt_content">
+        {% block content %}{% endblock %}
+    </div>
+    <div id="vt_footer"></div>
+
+  <script>
+    window.twttr = (function(d, s, id) {
+      var js, fjs = d.getElementsByTagName(s)[0],
+        t = window.twttr || {};
+      if (d.getElementById(id)) return;
+      js = d.createElement(s);
+      js.id = id;
+      js.src = "https://platform.twitter.com/widgets.js";
+      fjs.parentNode.insertBefore(js, fjs);
+     
+      t._e = [];
+      t.ready = function(f) {
+        t._e.push(f);
+      };
+     
+      return t;
+    }(document, "script", "twitter-wjs"));
+  </script>
+  <script>{%block js2%}{%endblock%}</script>
+</body>
+</html>

@@ -1,0 +1,50 @@
+{% extends "base.html" %}
+{% block title %}Vortext | Your profile{% endblock %}
+{% block description %}Vortext | Edit your profile{% endblock %}
+{% block content %}
+  <div id="profile_container">
+    {% if first_time %}
+      <p>Feel free to skip this step &mdash; nothing here is required.</p>
+    {% endif %}
+    {% if admin %}Editing {{handle}}{% endif %}
+    <form id="profile_form" method="post" action="/profile">
+      <div class="profile_field">
+        <label class="profile_label" for="name">Name</label>
+        <input class="profile_input" name="name" value="{{account.show_name}}"/>
+      </div>
+      <div class="profile_field">
+        <label class="profile_label" for="email">Email</label>
+        <input class="profile_input" name="email" value="{{account.show_email}}"/>
+      </div>
+      {% if admin %}
+      <div class="profile_field">
+        <label class="profile_label" for="status">Status</label>
+        <input class="profile_input" name="status" value="{{account.status}}"/>
+      </div>
+      {% endif %}
+      <div class="profile_field">
+        <label class="checkbox_label" for="private">Private account?</label>
+        <input class="profile_checkbox" type="checkbox" name="privacy" value="private" {% if account.is_private%}checked{% endif %}/>
+      </div>
+      <div class="profile_field">
+        <a class="profile_submit" href="javascript:$('#profile_form').submit();">Save {% if first_time %}Values{%else %}Changes{% endif %}</a>
+      </div>
+      {% if first_time %}
+        <div class="profile_field">
+          <a class="profile_submit" href="/me">Skip This Step</a>
+        </div>
+      {% endif %}
+    </form>
+    <br/>
+    {% if first_time %}
+      <p>If you enter your email address, we'll email you when we've finished parsing your tweets.</p>
+    {% endif %}
+    <P/>
+    {% if account.has_uploaded_data %}
+      You have uploaded your Twitter archive.
+    {% else %}
+      <p>Please note: Twitter's API only lets us access your 3200 most recent tweets. To go back further, you'll need to download your personal <a href="https://support.twitter.com/articles/20170160-downloading-your-twitter-archive">Twitter archive</a>,
+      and then <a href="/upload">upload it</a> to Vortext.</p>
+    {% endif %}
+  </div>
+{% endblock %}

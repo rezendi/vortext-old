@@ -1,0 +1,35 @@
+{% extends "base.html" %}
+{% block title %}Vortext | Upload{% endblock %}
+{% block description %}Vortext | Upload your Twitter history{% endblock %}
+{% block head%}
+    <link type="text/css" rel="stylesheet" href="/static/dropzone.css" />
+    <script src="/static/dropzone.js"></script>
+{%endblock%}
+{% block content %}
+  <div class="message">
+    Twitter's API only lets us access your 3200 most recent tweets. To go back further, you'll need to download <a href="https://support.twitter.com/articles/20170160-downloading-your-twitter-archive">your personal Twitter archive</a>, and upload it here.
+  </div>
+  <br/>
+  <br/>
+  <br/>
+  <br/>
+  
+  <form id="upload_form" action="{{upload_url}}" method="POST" enctype="multipart/form-data" class="dropzone">
+    <div class="fallback"> <input name="file" type="file" /> <input type="submit" name="submit" value="Submit"/> </div>
+  </form>
+{% endblock %}
+{% block js2 %}
+Dropzone.options.uploadForm = {
+  dictDefaultMessage: "Drop file or click here to upload",
+  init: function() {
+    this.on("success", function(file, response) {
+      if (response=="success") {
+        window.location = "/me?uploaded=true"
+      }
+      else {
+       alert(response);
+      }
+    });
+  }
+};
+{% endblock %}

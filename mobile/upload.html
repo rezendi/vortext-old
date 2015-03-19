@@ -1,0 +1,26 @@
+{% extends "base.html" %}
+{% block title %}Vortext | Upload{% endblock %}
+{% block head%}
+    <link type="text/css" rel="stylesheet" href="/static/dropzone.css" />
+    <script src="/static/dropzone.js"></script>
+{%endblock%}
+{% block content %}
+  <form id="upload_form" action="{{upload_url}}" method="POST" enctype="multipart/form-data" class="dropzone">
+    <div class="fallback"> <input name="file" type="file" /> <input type="submit" name="submit" value="Submit"/> </div>
+  </form>
+{% endblock %}
+{% block js2 %}
+Dropzone.options.uploadForm = {
+  dictDefaultMessage: "Drop file or click here to upload",
+  init: function() {
+    this.on("success", function(file, response) {
+      if (response=="success") {
+        window.location = "/me?uploaded=true"
+      }
+      else {
+       alert(response);
+      }
+    });
+  }
+};
+{% endblock %}

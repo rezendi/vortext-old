@@ -1,0 +1,160 @@
+{% extends "base.html" %}
+{% block title %}Vortext | Your Twitter links{% endblock %}
+{% block content %}
+  <div id="mobile_header" data-role="header" data-theme="b">
+      <h1><a href="/">Vortext</a></h1>
+      <a href="#timeline_popup" data-rel="popup">Timeline</a>
+      <a href="#filter_popup" data-rel="popup">Filter</a>
+  </div><!-- /header -->
+
+  <div data-role="content">
+    <div id="tweets_container">
+      <div id="explainer">
+        {% if category == "author" %}Retweeted links{% else %}Tweeted links{% endif %}
+        {% if category %}
+          {% if category == "all" %}with any mention of "{{term}}"{% endif %}
+          {% if category == "keyword" %}with the keyword "{{term}}"{% endif %}
+          {% if category == "site" %}to {{term}}{% endif %}
+          {% if category == "hashtag" %}hashtagged #{{term}}{% endif %}
+          {% if category == "mention" %}mentioning @{{term}}{% endif %}
+          {% if category == "author" %}by @{{term}}{% endif %}
+          {% if selected_year %}
+            from {% if selected_month %}{{month_name}} {%endif%}{{selected_year}}
+            (<a data-ajax="false" href="/{{handle}}/{{category}}/{{term}}">view all</a>)
+          {% endif %}
+        {% else %}
+          {% if selected_year %}
+            from {% if selected_month %}{{month_name}} {%endif%}{{selected_year}}
+          {% else %}
+            from {{default_year}}
+          {% endif %}
+        {% endif %}
+      </div>
+      <div id="tweets">
+        {% if statuses %}
+          {% for status in statuses %}
+            <div class="tweet" id="tweet-{{forloop.counter}}"></div>
+          {% endfor %}
+        {% else %}
+          <div id="sorry">Nothing found.</div>
+        {% endif %}
+      </div>
+      {% if statuses %}
+        <div id="loader">&nbsp;</div>
+      {% endif %}
+    </div>
+  </div>
+
+  <div data-role="popup" id="timeline_popup">
+      <ul data-role="listview" data-inset="true">
+        {% for year in timeline%}
+          <li><a data-ajax="false" href="/{{handle}}/{{year.number}}">{{year.number}}</a>
+            {% if year.number == selected_year or not selected_year and year.number == default_year%}
+              <ul data-role="listview" data-inset="true">
+                {% for month in year.months %}
+                  <li><a data-ajax="false" href="/{{handle}}/{{year.number}}/{{month.number}}">{{month.name}}</a> ({{month.count}})</li>
+                {% endfor %}
+              </ul>
+            {% endif %}
+          </li>
+        {% endfor %}
+      </ul>
+  </div>
+
+  <div data-role="popup" id="filter_popup">
+      <ul data-role="listview" data-inset="true">
+          <li><a href="#" onclick="javascript:showPopup('#author_popup');" data-rel="popup">Author</a></li>
+          <li><a href="#" onclick="javascript:showPopup('#keyword_popup');" data-rel="popup">Keyword</a></li>
+          <li><a href="#" onclick="javascript:showPopup('#hashtag_popup');" data-rel="popup">Hashtag</a></li>
+          <li><a href="#" onclick="javascript:showPopup('#mention_popup');" data-rel="popup">Mention</a></li>
+          <li><a href="#" onclick="javascript:showPopup('#site_popup');" data-rel="popup">Site</a></li>
+          <li><a href="#search_popup" data-rel="popup">Search</a></li>
+      </ul>
+  </div>
+
+  <div data-role="popup" id="author_popup">
+      <ul id="author_ul" data-role="listview" data-inset="true">
+      </ul>
+  </div>
+
+  <div data-role="popup" id="keyword_popup">
+      <ul id="keyword_ul" data-role="listview" data-inset="true">
+      </ul>
+  </div>
+
+  <div data-role="popup" id="hashtag_popup">
+      <ul id="hashtag_ul" data-role="listview" data-inset="true">
+      </ul>
+  </div>
+
+  <div data-role="popup" id="mention_popup">
+      <ul id="mention_ul" data-role="listview" data-inset="true">
+      </ul>
+  </div>
+
+  <div data-role="popup" id="site_popup">
+      <ul id="site_ul" data-role="listview" data-inset="true">
+      </ul>
+  </div>
+
+  <div data-role="popup" id="search_popup" class="ui-content" data-position-to="#mobile_header">
+      <form method="get" action="/search" id="search_form">
+          <input name="q" type="search" id="search_input"/>
+          <input type="submit" value="Search" id="search_button"/>
+      </form>
+  </div>
+{% endblock %}
+{% block js2 %}
+var autodata = {{autodata|safe}}
+var statuses = {{status_json|safe}};
+var tweets_shown = 0;
+var tweets_per_scroll = {{tweets_per_scroll}};
+var handle = "{{handle}}"
+
+$( document ).on( "pageinit", function( event ) {
+    _.each(["author","keyword","hashtag","mention","site"], function(category) {
+        _.each(autodata[category], function(term) {
+            $("#"+category+"_ul").append("<li><a data-ajax='false' href='/"+handle+"/"+category+"/"+term+"'>"+term+"</a></li>");
+        });
+        $("#"+category+"_ul").listview("refresh");
+    });
+
+    twttr.ready(function (twttr) {
+        showMoreTweets();
+    });
+});
+
+var showPopup = function(id) {
+    $("#filter_popup").popup("close");
+    setTimeout((function() { $(id).popup("open"); }), 500);
+}
+
+$(window).scroll(function() {
+  if ($(window).scrollTop() >= $(document).height() - $(window).height() - 20) {
+    showMoreTweets();
+  }
+});
+
+var showMoreTweets = function() {
+  if ($(".tweet").length > tweets_shown) {
+    $("#loader").show();
+    for (var i=tweets_shown; i<(tweets_shown+tweets_per_scroll) && i < statuses.length; i++) {
+      twttr.widgets.createTweet(''+statuses[i],
+      document.getElementById('tweet-'+(i+1)),
+      {
+        width: 550,
+        align: 'center',
+        conversation: '{% if args.conversations %}true{% else %}none{% endif %}',
+        cards: '{% if args.cards %}true{% else %}hidden{% endif %}',
+      })
+      .then(function (el) {
+        if ($(".tweet").length <= tweets_shown) {
+          $("#loader").hide();
+        }
+      });
+    }
+    tweets_shown+=tweets_per_scroll;
+  }
+}
+
+{% endblock %}

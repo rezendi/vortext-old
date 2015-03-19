@@ -1,0 +1,170 @@
+/* Pagewide */
+
+body {
+  font-family: "Arial",Arial,Helvetica,sans-serif;
+  background:white;
+  margin:0px;
+}
+
+a {
+  text-decoration:none;
+  color:#0084b4;
+  font-weight:normal;
+}
+
+/* Header */
+
+#vt_header {
+  top:0;
+  left:0;
+  width:98%;
+  height:32px;
+  line-height:32px;
+  padding:0px 1% 0px 1%;
+  background-color:#eeeeee;
+  color: #999;
+  font-size:18px;
+}
+
+#vt_header a {
+  color: #666;
+}
+
+#logo {
+  position:absolute;
+  left:1%;
+}
+
+#site_title, #site_title a {
+  margin-left:35px;
+  font-size:24px;
+  color: #666;
+}
+
+/* Content */
+
+#vt_content {
+  padding:8px;
+}
+
+/* Main page */
+
+.header_options {
+  margin-left:20%;
+}
+
+.status {
+  margin-left:30px;
+}
+
+.search_form {
+  padding-top:5px;
+  float:right;
+}
+
+#search_input, #search_button {
+  font-size:18px;
+  line-height:18px;
+  border-radius:8px;
+  border:0px;
+  margin:0px;
+  vertical-align:top;
+}
+
+.timeline {
+  position:absolute;
+  left:2%;
+  width:26%;
+}
+
+#tweets_container {
+  position:absolute;
+  left:30%;
+  width:58%;
+}
+
+#loader {
+  background-image: url("/static/loader.gif");
+  background-repeat: no-repeat;
+  background-position: center;
+  margin:12px;
+  display:none;
+}
+
+#options_container {
+  position:absolute;
+  left:88%;
+  width:10%;
+  text-align:right;
+  display:none;
+  border: 1px solid #aaa;
+  border-radius: 5px;
+  margin-top: 10px;
+  padding-left:5px;
+}
+
+#options_gear {
+  position:absolute;
+  left:96%;
+  width:2%;
+  background-image: url("/static/gear.png");
+  background-size: 20px;
+  background-repeat: no-repeat;
+  background-position: right;
+  padding:6px 0px 6px 0px;
+}
+#options_gear:hover {
+ cursor:pointer;
+}
+
+#explainer, #sorry {
+  text-align: center;
+}
+
+.selected {
+  font-size:x-large;
+}
+
+.profile_link, .logout_link {
+  margin-right:10px;
+}
+
+.welcome, .message, #profile_container, #upload_form {
+  position:absolute;
+  left:30%;
+  width:40%;
+  text-align: center;
+}
+
+.welcome {
+  font-size:24px;
+}
+
+.profile_field {
+  margin-top:10px;
+  clear;both;
+  overflow:hidden;
+}
+
+.profile_label {
+  font-size:24px;
+  float: left;
+}
+
+.profile_input {
+  height:24px;
+  font-size:24px;
+  width:400px;
+  float: right;
+}
+
+.checkbox_label {
+  font-size:24px;
+  float: left;
+}
+
+.profile_checkbox, .profile_submit {
+  vertical-align: middle;
+  float:right;
+  font-size:20px;
+}

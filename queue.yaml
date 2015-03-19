@@ -1,0 +1,24 @@
+queue:
+- name: default
+  rate: 60/m
+  max_concurrent_requests: 1
+  retry_parameters:
+    min_backoff_seconds: 60
+    task_retry_limit: 5
+    task_age_limit: 12h
+
+- name: expander
+  rate: 30/m
+  max_concurrent_requests: 2
+  retry_parameters:
+    min_backoff_seconds: 10
+    task_retry_limit: 5
+    task_age_limit: 12h
+
+- name: unpacker
+  rate: 30/m
+  max_concurrent_requests: 2
+  retry_parameters:
+    min_backoff_seconds: 60
+    task_retry_limit: 5
+    task_age_limit: 12h
